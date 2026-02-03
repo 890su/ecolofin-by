@@ -1,0 +1,142 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description: string;
+  canonical?: string;
+  ogImage?: string;
+  noindex?: boolean;
+}
+
+const {
+  title,
+  description,
+  canonical,
+  ogImage = '/img/logo.png',
+  noindex = false,
+} = Astro.props;
+
+const siteUrl = Astro.site || 'https://ecolofin.by';
+const fullOgImage = ogImage.startsWith('http') ? ogImage : `${siteUrl}${ogImage}`;
+const canonicalUrl = canonical || Astro.url.pathname;
+const fullCanonical = canonicalUrl.startsWith('http') ? canonicalUrl : `${siteUrl}${canonicalUrl}`;
+---
+
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+    
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={fullCanonical} />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={fullCanonical} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={fullOgImage} />
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={fullCanonical} />
+    <meta property="twitter:title" content={title} />
+    <meta property="twitter:description" content={description} />
+    <meta property="twitter:image" content={fullOgImage} />
+    
+    <!-- Structured Data (Schema.org) -->
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "ProfessionalService",
+      "name": "Экология Финансов",
+      "image": `${siteUrl}/img/logo.png`,
+      "url": siteUrl,
+      "telephone": "+375296908945",
+      "priceRange": "$$",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "ул. Михася Лынькова, дом 19/1, кабинет 3-26",
+        "addressLocality": "Минск",
+        "postalCode": "220104",
+        "addressCountry": "BY"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 53.9167,
+        "longitude": 27.4444
+      },
+      "openingHoursSpecification": {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+        "opens": "08:00",
+        "closes": "18:00"
+      }
+    })} />
+    
+    {Astro.url.pathname === '/' && (
+      <script type="application/ld+json" set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Что такое аутсорсинг бухгалтерии компании?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Аутсорсинг бухгалтерии - полная или частичная передача функций Вашей бухгалтерии компании-аутсорсеру. Это позволяет владельцам уделять больше времени развитию бизнеса."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Чем Экология финансов лучше собственной бухгалтерии?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Вы больше не зависите от личных обстоятельств одного человека, не платите штрафы за ошибки, получаете идеальный порядок в документах и готовую отчетность за две недели до срока."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Какие гарантии дает Экология финансов?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Мы гарантируем конфиденциальность и качественное ведение учета. Также мы обеспечиваем страховку профессиональной ответственности с лимитом до $90 тыс."
+            }
+          }
+        ]
+      })} />
+    )}
+  </head>
+  <body>
+    <slot />
+    
+    <!-- Yandex Metrika -->
+    <script type="text/javascript">
+      (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+      m[i].l=1*new Date();
+      for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+      k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+      (window, document, "script", "https://mc.yandex.ru/metrika/watch.js", "ym");
+      
+      try {
+        ym(27429140, "init", {
+          clickmap: true,
+          trackLinks: true,
+          accurateTrackBounce: true,
+          webvisor: true,
+          trackHash: true
+        });
+      } catch(e) { }
+    </script>
+    <noscript>
+      <div>
+        <img src="https://mc.yandex.ru/watch/27429140" style="position:absolute; left:-9999px;" alt="" />
+      </div>
+    </noscript>
+  </body>
+</html>

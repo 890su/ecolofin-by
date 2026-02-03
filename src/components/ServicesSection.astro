@@ -1,0 +1,168 @@
+---
+import { oneTimeServices, fullServiceSteps } from '../content/services';
+import { serviceList } from '../content/service-pages';
+---
+
+<section id="services" class="section-padding bg-white">
+  <div class="container-custom">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+        Наши услуги
+      </h2>
+      <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+        Полный спектр услуг от постановки учета до полного сопровождения
+      </p>
+    </div>
+
+    <!-- Быстрые ссылки на посадочные -->
+    <div class="mb-8">
+      <p class="text-sm text-gray-500 mb-3 text-center">Популярные запросы</p>
+      <div class="flex flex-wrap justify-center gap-3">
+        {serviceList.slice(0, 6).map((item) => (
+          <a
+            href={`/${item.slug}`}
+            class="text-sm px-3 py-1 rounded-full bg-primary-50 text-primary-700 hover:bg-primary-100 transition-colors"
+          >
+            {item.title}
+          </a>
+        ))}
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="mb-8">
+      <div class="flex flex-wrap justify-center border-b border-gray-200">
+        <button
+          class="tab-button px-6 py-3 font-semibold text-gray-600 border-b-2 border-transparent hover:text-primary-600 transition-colors"
+          data-tab="one-time"
+        >
+          Разовые бухгалтерские услуги
+        </button>
+        <button
+          class="tab-button px-6 py-3 font-semibold text-gray-600 border-b-2 border-transparent hover:text-primary-600 transition-colors"
+          data-tab="full-service"
+        >
+          Полное сопровождение
+        </button>
+      </div>
+    </div>
+
+    <!-- One-time Services Tab -->
+    <div id="tab-one-time" class="tab-content">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {oneTimeServices.map((service) => (
+          <div class="bg-gray-50 p-6 rounded-lg hover:shadow-lg transition-shadow">
+            <div class="flex justify-between items-start mb-4">
+              <h3 class="text-xl font-bold text-gray-900">{service.title}</h3>
+              {service.price && (
+                <span class="text-lg font-semibold text-primary-600 whitespace-nowrap ml-4">
+                  {service.price}
+                </span>
+              )}
+            </div>
+            <p class="text-gray-600 mb-4">{service.description}</p>
+            <ul class="space-y-2 mb-6">
+              {service.features.map((feature) => (
+                <li class="flex items-start space-x-2">
+                  <svg class="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span class="text-gray-700 text-sm">{feature}</span>
+                </li>
+              ))}
+            </ul>
+            <a
+              href="#contacts"
+              class="btn-primary inline-block text-center w-full"
+            >
+              Узнать стоимость
+            </a>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <!-- Full Service Tab -->
+    <div id="tab-full-service" class="tab-content hidden">
+      <div class="max-w-4xl mx-auto">
+        <p class="text-lg text-gray-700 mb-8 text-center">
+          Приобретая полное обслуживание бухгалтерии в "Экологии финансов",
+          Вы получаете не только безупречное ведение учета и отчетности.
+          Вы также можете рассчитывать на значительную экономию времени и денег.
+        </p>
+        
+        <div class="space-y-6">
+          {fullServiceSteps.map((step, index) => (
+            <div class="bg-gray-50 p-6 rounded-lg">
+              <div class="flex items-start space-x-4">
+                <div class="flex-shrink-0 w-10 h-10 bg-primary-600 text-white rounded-full flex items-center justify-center font-bold">
+                  {index + 1}
+                </div>
+                <div class="flex-1">
+                  <h3 class="text-xl font-bold text-gray-900 mb-2">{step.title}</h3>
+                  <p class="text-gray-600">{step.description}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+        
+        <div class="mt-8 text-center">
+          <p class="text-lg text-gray-700 mb-4">
+            В результате Вы будете осведомлены о финансовом положении Вашей организации:
+            основные финансовые показатели, дебиторская и кредиторская задолженности,
+            информация об остатках, суммах налогов и сборов и т.п.
+          </p>
+          <a href="#pricing" class="btn-primary inline-block">
+            Посмотреть цены →
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const tabButtons = document.querySelectorAll('.tab-button');
+    const tabContents = document.querySelectorAll('.tab-content');
+    
+    tabButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        const targetTab = button.dataset.tab;
+        
+        // Remove active state from all buttons
+        tabButtons.forEach((btn) => {
+          btn.classList.remove('border-primary-600', 'text-primary-600');
+          btn.classList.add('border-transparent', 'text-gray-600');
+        });
+        
+        // Add active state to clicked button
+        button.classList.add('border-primary-600', 'text-primary-600');
+        button.classList.remove('border-transparent', 'text-gray-600');
+        
+        // Hide all tab contents
+        tabContents.forEach((content) => {
+          content.classList.add('hidden');
+        });
+        
+        // Show target tab content
+        const targetContent = document.getElementById(`tab-${targetTab}`);
+        if (targetContent) {
+          targetContent.classList.remove('hidden');
+        }
+      });
+    });
+    
+    // Set first tab as active by default
+    if (tabButtons.length > 0) {
+      tabButtons[0].click();
+    }
+  });
+</script>
+
+<style>
+  .tab-button.active {
+    @apply border-primary-600 text-primary-600;
+  }
+</style>

@@ -1,0 +1,87 @@
+---
+const team = [
+  {
+    name: 'Бухгалтер',
+    role: 'Ведущий специалист',
+    experience: '15+ лет опыта',
+    image: '/img/team-1.webp'
+  },
+  {
+    name: 'Бухгалтер',
+    role: 'Налоговый консультант',
+    experience: '12+ лет опыта',
+    image: '/img/team-2.webp'
+  },
+  {
+    name: 'Бухгалтер',
+    role: 'Специалист по отчетности',
+    experience: '10+ лет опыта',
+    image: '/img/team-3.webp'
+  },
+  {
+    name: 'Бухгалтер',
+    role: 'Консультант',
+    experience: '8+ лет опыта',
+    image: '/img/team-4.webp'
+  }
+];
+---
+
+<section id="team" class="section-padding bg-gray-50">
+  <div class="container-custom">
+    <!-- Header -->
+    <div class="text-center mb-12">
+      <span class="badge-primary mb-4">Наша команда</span>
+      <h2 class="text-gray-900 mb-4">
+        Профессионалы своего дела
+      </h2>
+      <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+        За каждым клиентом закреплён личный бухгалтер с опытом работы от 8 до 20 лет. 
+        Мы знаем специфику вашего бизнеса.
+      </p>
+    </div>
+    
+    <!-- Team Grid -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+      {team.map((member, index) => (
+        <div class={`group animate-on-scroll stagger-${index + 1}`}>
+          <div class="card overflow-hidden">
+            <!-- Image -->
+            <div class="aspect-square overflow-hidden bg-gray-100">
+              <img 
+                src={member.image} 
+                alt={member.name}
+                class="w-full h-full object-cover img-smooth"
+                loading="lazy"
+                width="300"
+                height="300"
+              />
+            </div>
+            
+            <!-- Info -->
+            <div class="p-4 text-center">
+              <h3 class="font-semibold text-gray-900 mb-1">{member.name}</h3>
+              <p class="text-sm text-primary-600 mb-1">{member.role}</p>
+              <p class="text-xs text-gray-500">{member.experience}</p>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+    
+    <!-- CTA -->
+    <div class="mt-12 text-center">
+      <div class="inline-flex items-center gap-4 bg-white p-4 md:p-6 rounded-2xl shadow-soft">
+        <div class="w-12 h-12 bg-accent-100 rounded-xl flex items-center justify-center">
+          <svg class="w-6 h-6 text-accent-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+          </svg>
+        </div>
+        <div class="text-left">
+          <p class="font-semibold text-gray-900">Личный бухгалтер для вашего бизнеса</p>
+          <p class="text-sm text-gray-500">Знает специфику вашей отрасли и всегда на связи</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

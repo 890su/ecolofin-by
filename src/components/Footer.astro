@@ -1,0 +1,153 @@
+---
+import { serviceList } from '../content/service-pages';
+
+const quickLinks = [
+  { href: '#services', label: 'Услуги' },
+  { href: '#pricing', label: 'Цены' },
+  { href: '#team', label: 'Команда' },
+  { href: '#faq', label: 'FAQ' },
+  { href: '#contacts', label: 'Контакты' },
+];
+
+// Берем первые 6 услуг для футера
+const serviceLinks = serviceList.slice(0, 6);
+---
+
+<footer id="footer" class="bg-gray-900 text-gray-300">
+  <!-- Main Footer -->
+  <div class="container-custom py-16">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+      <!-- Company Info -->
+      <div class="lg:col-span-1">
+        <a href="/" class="inline-block mb-6">
+          <img 
+            src="/img/logo.png" 
+            alt="Экология Финансов" 
+            class="h-10 brightness-0 invert opacity-90"
+            width="120"
+            height="40"
+          />
+        </a>
+        <p class="text-gray-400 mb-4 text-sm leading-relaxed">
+          Профессиональные бухгалтерские услуги в Минске и по всей Беларуси. 
+          Экономия до 70% без потери качества.
+        </p>
+        <div class="flex items-center gap-2 mb-3">
+          <div class="w-8 h-8 bg-green-500/20 rounded-lg flex items-center justify-center">
+            <svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+            </svg>
+          </div>
+          <span class="text-sm text-gray-400">Страхование до $90K</span>
+        </div>
+      </div>
+
+      <!-- Quick Links -->
+      <div>
+        <h3 class="text-white font-semibold text-lg mb-5">Навигация</h3>
+        <ul class="space-y-3">
+          {quickLinks.map(link => (
+            <li>
+              <a 
+                href={link.href} 
+                class="text-gray-400 hover:text-white transition-colors text-sm flex items-center gap-2"
+              >
+                <svg class="w-4 h-4 text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+                {link.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <!-- Services -->
+      <div>
+        <h3 class="text-white font-semibold text-lg mb-5">Услуги</h3>
+        <ul class="space-y-3">
+          {serviceLinks.map(service => (
+            <li>
+              <a 
+                href={`/${service.slug}`} 
+                class="text-gray-400 hover:text-white transition-colors text-sm flex items-center gap-2"
+              >
+                <svg class="w-4 h-4 text-accent-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+                {service.title.replace(' в Минске', '').replace('Аутсорсинг ', '')}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <!-- Contact Info -->
+      <div>
+        <h3 class="text-white font-semibold text-lg mb-5">Контакты</h3>
+        <div class="space-y-4">
+          <!-- Phones -->
+          <div>
+            <a 
+              href="tel:+375296908945" 
+              class="text-xl font-bold text-white hover:text-primary-400 transition-colors block mb-1"
+            >
+              8 (029) 690-89-45
+            </a>
+            <a 
+              href="tel:+375173738945" 
+              class="text-gray-400 hover:text-white transition-colors block text-sm"
+            >
+              8 (017) 373-89-45
+            </a>
+          </div>
+          
+          <!-- Email -->
+          <a 
+            href="mailto:info@ecolofin.by" 
+            class="text-gray-400 hover:text-white transition-colors flex items-center gap-2 text-sm"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+            </svg>
+            info@ecolofin.by
+          </a>
+          
+          <!-- Address -->
+          <div class="text-gray-400 text-sm flex items-start gap-2">
+            <svg class="w-4 h-4 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+            <span>220104, Минск, ул. Михася Лынькова, дом 19/1, каб. 3-26</span>
+          </div>
+          
+          <!-- Working Hours -->
+          <div class="text-gray-400 text-sm flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            Пн-Пт: 8:00-18:00
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Bar -->
+  <div class="border-t border-gray-800">
+    <div class="container-custom py-6">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+        <div class="text-sm text-gray-500">
+          <p class="mb-1">ЧП «Экология финансов» | УНП 191099473</p>
+          <p>&copy; {new Date().getFullYear()} Все права защищены</p>
+        </div>
+        <div class="flex items-center gap-6">
+          <a href="/privacy" class="text-sm text-gray-500 hover:text-white transition-colors">
+            Политика конфиденциальности
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>

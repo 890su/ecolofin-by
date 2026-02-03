@@ -1,0 +1,121 @@
+# ============================================
+# SPAM URL CLEANUP — Japanese SEO Hack (410 Gone)
+# ============================================
+
+RewriteEngine On
+
+# --- Block spam query parameters ---
+# Pattern: ?q=...&channel=126e94&from=...cart.aspx
+RewriteCond %{QUERY_STRING} channel=126e94 [NC,OR]
+RewriteCond %{QUERY_STRING} cart\.aspx [NC,OR]
+RewriteCond %{QUERY_STRING} detail\.xhtml [NC,OR]
+RewriteCond %{QUERY_STRING} cate_id= [NC,OR]
+RewriteCond %{QUERY_STRING} pid=.*&channel= [NC]
+RewriteRule ^(.*)$ - [R=410,L]
+
+# --- Block spam path-based URLs ---
+RewriteRule ^hewuakaneshop- - [R=410,L]
+RewriteRule ^rcmd-ls- - [R=410,L]
+
+# --- Block .aspx and .xhtml requests (not used by this site) ---
+RewriteRule \.aspx$ - [R=410,L]
+RewriteRule \.xhtml$ - [R=410,L]
+
+# ============================================
+# HTTPS Redirect
+# ============================================
+RewriteCond %{SERVER_PORT} 80
+RewriteRule ^(.*)$ https://ecolofin.by/$1 [R=301,L]
+
+# Custom error pages
+ErrorDocument 404 /404.html
+ErrorDocument 410 "<html><head><meta charset='utf-8'><title>410 Gone</title></head><body><h1>410 — Страница удалена</h1><p>Эта страница больше не существует. <a href='/'>Перейти на главную</a></p></body></html>"
+
+# Security Headers
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set X-XSS-Protection "1; mode=block"
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+    Header set Permissions-Policy "camera=(), microphone=(), geolocation=()"
+    Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains" env=HTTPS
+</IfModule>
+
+# GZIP Compression
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html
+    AddOutputFilterByType DEFLATE text/css
+    AddOutputFilterByType DEFLATE text/javascript
+    AddOutputFilterByType DEFLATE application/javascript
+    AddOutputFilterByType DEFLATE application/x-javascript
+    AddOutputFilterByType DEFLATE application/json
+    AddOutputFilterByType DEFLATE application/ld+json
+    AddOutputFilterByType DEFLATE application/xml
+    AddOutputFilterByType DEFLATE text/xml
+    AddOutputFilterByType DEFLATE image/svg+xml
+    AddOutputFilterByType DEFLATE application/x-font-woff
+    AddOutputFilterByType DEFLATE font/woff2
+</IfModule>
+
+# Browser Caching
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresDefault "access plus 1 month"
+
+    # HTML - short cache (content changes)
+    ExpiresByType text/html "access plus 1 hour"
+
+    # CSS & JavaScript
+    ExpiresByType text/css "access plus 1 year"
+    ExpiresByType application/javascript "access plus 1 year"
+    ExpiresByType text/javascript "access plus 1 year"
+
+    # Images
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType image/gif "access plus 1 year"
+    ExpiresByType image/webp "access plus 1 year"
+    ExpiresByType image/svg+xml "access plus 1 year"
+    ExpiresByType image/x-icon "access plus 1 year"
+
+    # Fonts
+    ExpiresByType font/woff "access plus 1 year"
+    ExpiresByType font/woff2 "access plus 1 year"
+    ExpiresByType application/font-woff "access plus 1 year"
+    ExpiresByType application/font-woff2 "access plus 1 year"
+    ExpiresByType application/x-font-woff "access plus 1 year"
+    ExpiresByType font/ttf "access plus 1 year"
+    ExpiresByType font/otf "access plus 1 year"
+    ExpiresByType application/x-font-ttf "access plus 1 year"
+</IfModule>
+
+# Cache-Control headers
+<IfModule mod_headers.c>
+    <FilesMatch "\.(css|js)$">
+        Header set Cache-Control "public, max-age=31536000, immutable"
+    </FilesMatch>
+    <FilesMatch "\.(jpg|jpeg|png|gif|webp|svg|ico)$">
+        Header set Cache-Control "public, max-age=31536000, immutable"
+    </FilesMatch>
+    <FilesMatch "\.(woff|woff2|ttf|otf|eot)$">
+        Header set Cache-Control "public, max-age=31536000, immutable"
+    </FilesMatch>
+    <FilesMatch "\.(html|php)$">
+        Header set Cache-Control "public, max-age=3600, must-revalidate"
+    </FilesMatch>
+</IfModule>
+
+# Prevent directory listing
+Options -Indexes
+
+# Prevent access to sensitive files
+<FilesMatch "\.(htaccess|htpasswd|ini|log|sh|sql|bak)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# Block access to PHP files that shouldn't be accessed directly
+<Files "Mailchimp.php">
+    Order Allow,Deny
+    Deny from all
+</Files>

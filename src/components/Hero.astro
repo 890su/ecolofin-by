@@ -1,0 +1,119 @@
+---
+import CTAForm from './CTAForm.astro';
+---
+
+<section id="hero" class="relative min-h-[90vh] flex items-center overflow-hidden">
+  <!-- Background Pattern -->
+  <div class="absolute inset-0 bg-gradient-hero"></div>
+  <div class="absolute inset-0 opacity-[0.03]" style="background-image: url('/img/header-bg.svg'); background-size: 100px;"></div>
+  
+  <!-- Decorative Elements -->
+  <div class="absolute top-20 right-10 w-72 h-72 bg-accent-200 rounded-full blur-3xl opacity-30"></div>
+  <div class="absolute bottom-20 left-10 w-96 h-96 bg-primary-200 rounded-full blur-3xl opacity-30"></div>
+  
+  <div class="container-custom relative z-10 py-12 md:py-20">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
+      <!-- Left Column: Content -->
+      <div class="text-center lg:text-left animate-fade-in-up">
+        <!-- Badge -->
+        <div class="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm px-4 py-2 rounded-full shadow-soft mb-6">
+          <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+          <span class="text-sm font-medium text-gray-700">7+ лет безупречной работы</span>
+        </div>
+        
+        <h1 class="text-gray-900 mb-6">
+          Бухгалтерские услуги<br class="hidden sm:block" />
+          <span class="text-gradient">для вашего бизнеса</span>
+        </h1>
+        
+        <p class="text-xl md:text-2xl text-gray-600 mb-8 max-w-xl">
+          Аутсорсинг бухгалтерии в Минске и Беларуси. 
+          <span class="font-semibold text-gray-800">Экономия до 70%</span> без потери качества.
+        </p>
+        
+        <!-- Key Benefits -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+          <div class="flex items-center gap-3 bg-white/60 backdrop-blur-sm p-3 rounded-xl">
+            <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
+              <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+              </svg>
+            </div>
+            <span class="text-gray-700 text-sm font-medium">Страхование до $90K</span>
+          </div>
+          
+          <div class="flex items-center gap-3 bg-white/60 backdrop-blur-sm p-3 rounded-xl">
+            <div class="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0">
+              <svg class="w-5 h-5 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+              </svg>
+            </div>
+            <span class="text-gray-700 text-sm font-medium">2650+ деклараций</span>
+          </div>
+          
+          <div class="flex items-center gap-3 bg-white/60 backdrop-blur-sm p-3 rounded-xl">
+            <div class="w-10 h-10 bg-accent-100 rounded-lg flex items-center justify-center flex-shrink-0">
+              <svg class="w-5 h-5 text-accent-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+              </svg>
+            </div>
+            <span class="text-gray-700 text-sm font-medium">Личный бухгалтер</span>
+          </div>
+          
+          <div class="flex items-center gap-3 bg-white/60 backdrop-blur-sm p-3 rounded-xl">
+            <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0">
+              <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+            </div>
+            <span class="text-gray-700 text-sm font-medium">Быстрый старт</span>
+          </div>
+        </div>
+        
+        <!-- Phone Number -->
+        <div class="flex flex-col sm:flex-row items-center gap-4 mb-8">
+          <a 
+            href="tel:+375296908945" 
+            class="text-2xl md:text-3xl font-bold text-primary-700 hover:text-primary-800 transition-colors"
+          >
+            8 (029) 690-89-45
+          </a>
+          <span class="hidden sm:block text-gray-400">|</span>
+          <span class="text-gray-500">Пн-Пт 8:00-18:00</span>
+        </div>
+        
+        <!-- CTA Buttons -->
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a href="#contacts" class="btn-primary text-center">
+            Бесплатная консультация
+          </a>
+          <a href="#services" class="btn-secondary text-center">
+            Подобрать услугу
+          </a>
+        </div>
+      </div>
+      
+      <!-- Right Column: Form + Image -->
+      <div class="relative">
+        <!-- Promo Image (Desktop) -->
+        <div class="hidden lg:block absolute -right-8 -bottom-20 w-48 h-48 z-0">
+          <img 
+            src="/img/guy.png" 
+            alt="Бухгалтер" 
+            class="w-full h-full object-contain opacity-20"
+            loading="lazy"
+          />
+        </div>
+        
+        <!-- Form Card -->
+        <div class="relative z-10">
+          <CTAForm 
+            title="Получите бесплатную консультацию"
+            subtitle="Наш специалист свяжется с Вами в течение 15 минут"
+            source="Hero секция"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

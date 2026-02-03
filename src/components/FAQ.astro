@@ -1,0 +1,100 @@
+---
+import { faqItems } from '../content/faq';
+import CTAForm from './CTAForm.astro';
+---
+
+<section id="faq" class="section-padding bg-white">
+  <div class="container-custom">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+        Ответы на популярные вопросы
+      </h2>
+    </div>
+    
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+      <!-- FAQ Accordion -->
+      <div class="space-y-4">
+        {faqItems.map((item, index) => (
+          <div class="border border-gray-200 rounded-lg overflow-hidden">
+            <button
+              class="faq-question w-full px-6 py-4 text-left font-semibold text-gray-900 hover:bg-gray-50 transition-colors flex items-center justify-between"
+              data-index={index}
+            >
+              <span>{item.question}</span>
+              <svg
+                class="w-5 h-5 text-gray-500 transform transition-transform"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            <div class="faq-answer hidden px-6 pb-4 text-gray-600 whitespace-pre-line">
+              {item.answer}
+            </div>
+          </div>
+        ))}
+      </div>
+      
+      <!-- Contact Form -->
+      <div>
+        <CTAForm
+          title="Задайте свой вопрос"
+          subtitle="Не нашли ответ? Свяжитесь с нами!"
+          source="FAQ секция"
+        />
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const questions = document.querySelectorAll('.faq-question');
+    
+    questions.forEach((question) => {
+      question.addEventListener('click', () => {
+        const answer = question.nextElementSibling as HTMLElement;
+        const icon = question.querySelector('svg') as SVGElement;
+        const isOpen = !answer.classList.contains('hidden');
+        
+        // Close all other answers
+        questions.forEach((q) => {
+          const a = q.nextElementSibling as HTMLElement;
+          const i = q.querySelector('svg') as SVGElement;
+          if (a && a !== answer) {
+            a.classList.add('hidden');
+            if (i) i.classList.remove('rotate-180');
+          }
+        });
+        
+        // Toggle current answer
+        if (isOpen) {
+          answer.classList.add('hidden');
+          icon.classList.remove('rotate-180');
+        } else {
+          answer.classList.remove('hidden');
+          icon.classList.add('rotate-180');
+        }
+      });
+    });
+  });
+</script>
+
+<style>
+  .faq-answer {
+    animation: fadeIn 0.3s ease-in;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>

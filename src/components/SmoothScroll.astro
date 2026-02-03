@@ -1,0 +1,46 @@
+---
+---
+
+<script>
+  // Улучшенная обработка якорных ссылок с учетом фиксированного header
+  document.addEventListener('DOMContentLoaded', () => {
+    const header = document.getElementById('header');
+    const headerHeight = header ? header.offsetHeight : 80;
+    
+    // Обработка всех якорных ссылок
+    document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+      anchor.addEventListener('click', function (e) {
+        const href = this.getAttribute('href');
+        
+        // Пропускаем пустые якоря и якоря только с #
+        if (!href || href === '#' || href === '#!') {
+          return;
+        }
+        
+        try {
+          const target = document.querySelector(href);
+          
+          if (target) {
+            e.preventDefault();
+            
+            const targetPosition = target.getBoundingClientRect().top + window.pageYOffset;
+            const offsetPosition = targetPosition - headerHeight - 20; // 20px дополнительный отступ
+            
+            window.scrollTo({
+              top: offsetPosition,
+              behavior: 'smooth'
+            });
+            
+            // Обновляем URL без перезагрузки страницы
+            if (history.pushState) {
+              history.pushState(null, null, href);
+            }
+          }
+        } catch (error) {
+          // Если элемент не найден, позволяем браузеру обработать ссылку стандартным способом
+          console.log('Target not found:', href);
+        }
+      });
+    });
+  });
+</script>

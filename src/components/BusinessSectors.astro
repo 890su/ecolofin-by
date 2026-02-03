@@ -1,0 +1,35 @@
+---
+const sectors = [
+  { name: 'Оптовая торговля', icon: '📦' },
+  { name: 'ВЭД', icon: '🌍' },
+  { name: 'Оказание услуг', icon: '👍' },
+  { name: 'Производство', icon: '⚙️' },
+  { name: 'Производство одежды', icon: '👕' },
+  { name: 'Продукты питания', icon: '🍎' },
+  { name: 'Грузоперевозки', icon: '🚚' },
+  { name: 'Общественные объединения', icon: '👥' },
+  { name: 'Сельхозпредприятия', icon: '🌾' },
+  { name: 'Фитнес-центры', icon: '🎯' },
+  { name: 'Косметические салоны', icon: '💄' },
+  { name: 'Розничная торговля', icon: '🛒' },
+];
+---
+
+<section id="business-sectors" class="section-padding bg-gradient-to-br from-primary-50 to-primary-100">
+  <div class="container-custom">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+        Опыт работы в следующих сферах бизнеса
+      </h2>
+    </div>
+    
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      {sectors.map((sector) => (
+        <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow text-center">
+          <div class="text-4xl mb-3">{sector.icon}</div>
+          <h3 class="text-lg font-semibold text-gray-900">{sector.name}</h3>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

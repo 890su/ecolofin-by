@@ -1,0 +1,173 @@
+---
+interface Props {
+  title?: string;
+  subtitle?: string;
+  source?: string;
+  compact?: boolean;
+  dark?: boolean;
+}
+
+const { 
+  title = "Получите бесплатную консультацию",
+  subtitle = "Наш специалист свяжется с Вами в течение 15 минут",
+  source = "Форма обратной связи",
+  compact = false,
+  dark = false
+} = Astro.props;
+---
+
+<div class={`rounded-2xl p-6 md:p-8 ${dark ? 'bg-gray-900 text-white' : 'bg-white shadow-card'}`}>
+  {title && (
+    <h3 class={`font-bold mb-2 ${compact ? 'text-lg' : 'text-2xl'} ${dark ? 'text-white' : 'text-gray-900'}`}>
+      {title}
+    </h3>
+  )}
+  {subtitle && !compact && (
+    <p class={`mb-6 text-sm ${dark ? 'text-gray-300' : 'text-gray-500'}`}>
+      {subtitle}
+    </p>
+  )}
+  
+  <form 
+    class="space-y-4" 
+    id={`cta-form-${Math.random().toString(36).substr(2, 9)}`}
+    data-source={source}
+  >
+    <div>
+      <input
+        type="text"
+        name="name"
+        placeholder="Ваше имя или компания"
+        required
+        class={`input ${dark ? 'bg-gray-800 border-gray-700 text-white placeholder-gray-400' : ''}`}
+      />
+    </div>
+    
+    <div>
+      <input
+        type="tel"
+        name="phone"
+        placeholder="Телефон для связи"
+        required
+        class={`input ${dark ? 'bg-gray-800 border-gray-700 text-white placeholder-gray-400' : ''}`}
+      />
+    </div>
+    
+    {!compact && (
+      <div>
+        <input
+          type="email"
+          name="email"
+          placeholder="Email (необязательно)"
+          class={`input ${dark ? 'bg-gray-800 border-gray-700 text-white placeholder-gray-400' : ''}`}
+        />
+      </div>
+    )}
+    
+    <button
+      type="submit"
+      class="w-full btn-primary py-4 text-lg relative overflow-hidden group"
+    >
+      <span class="relative z-10">Получить консультацию</span>
+      <span class="absolute inset-0 bg-white/20 transform translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-500"></span>
+    </button>
+    
+    <p class={`text-xs text-center ${dark ? 'text-gray-400' : 'text-gray-500'}`}>
+      Нажимая кнопку, вы соглашаетесь с{' '}
+      <a href="/privacy" class={`underline hover:no-underline ${dark ? 'text-gray-300' : 'text-primary-600'}`}>
+        политикой конфиденциальности
+      </a>
+    </p>
+    
+    <div id="form-message" class="hidden mt-4 p-4 rounded-xl text-center"></div>
+  </form>
+  
+  <!-- Trust Badges -->
+  {!compact && (
+    <div class={`mt-6 pt-6 border-t ${dark ? 'border-gray-700' : 'border-gray-100'}`}>
+      <div class="flex items-center justify-center gap-6 text-xs">
+        <div class="flex items-center gap-2">
+          <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+          </svg>
+          <span class={dark ? 'text-gray-400' : 'text-gray-500'}>Конфиденциально</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <span class={dark ? 'text-gray-400' : 'text-gray-500'}>Ответим за 15 мин</span>
+        </div>
+      </div>
+    </div>
+  )}
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const forms = document.querySelectorAll('form[id^="cta-form-"]');
+    
+    forms.forEach((form) => {
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const formData = new FormData(form as HTMLFormElement);
+        const data = {
+          name: formData.get('name'),
+          email: formData.get('email'),
+          phone: formData.get('phone'),
+          message: formData.get('message'),
+          source: (form as HTMLElement).dataset.source || 'Форма обратной связи',
+        };
+        
+        const submitButton = form.querySelector('button[type="submit"]') as HTMLButtonElement;
+        const messageDiv = form.querySelector('#form-message') as HTMLElement;
+        const originalText = submitButton.innerHTML;
+        
+        // Disable button and show loading
+        submitButton.disabled = true;
+        submitButton.innerHTML = '<svg class="animate-spin h-5 w-5 mx-auto" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>';
+        messageDiv.classList.add('hidden');
+        
+        try {
+          const apiUrl = '/api/contact';
+          
+          const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+          });
+          
+          if (!response.ok) {
+            throw new Error('API недоступен');
+          }
+          
+          const result = await response.json();
+          
+          if (result.success) {
+            messageDiv.className = 'mt-4 p-4 rounded-xl text-center bg-green-50 text-green-800 border border-green-200';
+            messageDiv.innerHTML = '<div class="flex items-center justify-center gap-2"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span>Спасибо! Мы скоро свяжемся с Вами.</span></div>';
+            (form as HTMLFormElement).reset();
+          } else {
+            throw new Error(result.error || 'Ошибка отправки');
+          }
+          
+          messageDiv.classList.remove('hidden');
+        } catch (error) {
+          messageDiv.className = 'mt-4 p-4 rounded-xl text-center bg-primary-50 text-primary-800 border border-primary-200';
+          messageDiv.innerHTML = `
+            <p class="mb-2 font-semibold">Позвоните нам напрямую:</p>
+            <a href="tel:+375296908945" class="text-lg font-bold text-primary-600 hover:text-primary-700">8 (029) 690-89-45</a>
+          `;
+          messageDiv.classList.remove('hidden');
+          (form as HTMLFormElement).reset();
+        } finally {
+          submitButton.disabled = false;
+          submitButton.innerHTML = originalText;
+        }
+      });
+    });
+  });
+</script>

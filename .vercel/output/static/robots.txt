@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /cgi-bin/
+
+Host: https://ecolofin.by
+Sitemap: https://ecolofin.by/sitemap.xml

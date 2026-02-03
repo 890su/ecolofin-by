@@ -1,0 +1,12 @@
+User-agent: *
+Allow: /
+Disallow: /cgi-bin/
+Disallow: /Mailchimp/
+Disallow: /contact.php
+Disallow: /subscribe.php
+Disallow: /Mailchimp.php
+Disallow: /yandex_*.html
+Disallow: /2fd1557f19b5.html
+
+Host: https://ecolofin.by
+Sitemap: https://ecolofin.by/sitemap.xml
