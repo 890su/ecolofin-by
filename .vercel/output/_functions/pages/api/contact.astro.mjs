@@ -1,8 +1,13 @@
 export { renderers } from '../../renderers.mjs';
 
 async function sendToTelegram(data) {
-  const botToken = "8503860004:AAHjB6l5VJ2D9NP8oGd8gGuczSNmH5QP9u8";
-  const chatId = "-5240163266";
+  const botToken = process.env.TELEGRAM_BOT_TOKEN || "8503860004:AAHjB6l5VJ2D9NP8oGd8gGuczSNmH5QP9u8";
+  const chatId = process.env.TELEGRAM_CHAT_ID || "-5240163266";
+  console.log("Telegram config check:", {
+    hasToken: true,
+    hasChatId: true,
+    chatIdValue: chatId
+  });
   const message = formatMessage(data);
   const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
   try {
@@ -53,16 +58,21 @@ function escapeHtml(text) {
   return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
 }
 
+const prerender = false;
 const POST = async ({ request }) => {
+  console.log("=== Contact API called ===");
   try {
     const data = await request.json();
+    console.log("Received data:", JSON.stringify(data));
     const { name, email, phone, message, source } = data;
     if (!name || !phone) {
+      console.log("Validation failed: missing name or phone");
       return new Response(
         JSON.stringify({ success: false, error: "Имя и телефон обязательны" }),
         { status: 400, headers: { "Content-Type": "application/json" } }
       );
     }
+    console.log("Sending to Telegram...");
     const success = await sendToTelegram({
       name: name.trim(),
       email: email?.trim(),
@@ -70,6 +80,7 @@ const POST = async ({ request }) => {
       message: message?.trim(),
       source: source || "Форма обратной связи"
     });
+    console.log("Telegram result:", success);
     if (!success) {
       return new Response(
         JSON.stringify({ success: false, error: "Ошибка при отправке сообщения" }),
@@ -91,7 +102,8 @@ const POST = async ({ request }) => {
 
 const _page = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
-  POST
+  POST,
+  prerender
 }, Symbol.toStringTag, { value: 'Module' }));
 
 const page = () => _page;

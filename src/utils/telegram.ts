@@ -7,11 +7,21 @@ export interface TelegramMessage {
 }
 
 export async function sendToTelegram(data: TelegramMessage): Promise<boolean> {
-  const botToken = import.meta.env.TELEGRAM_BOT_TOKEN;
-  const chatId = import.meta.env.TELEGRAM_CHAT_ID;
+  // Vercel serverless uses process.env, Astro dev uses import.meta.env
+  const botToken = process.env.TELEGRAM_BOT_TOKEN || import.meta.env.TELEGRAM_BOT_TOKEN;
+  const chatId = process.env.TELEGRAM_CHAT_ID || import.meta.env.TELEGRAM_CHAT_ID;
+
+  console.log('Telegram config check:', { 
+    hasToken: !!botToken, 
+    hasChatId: !!chatId,
+    chatIdValue: chatId 
+  });
 
   if (!botToken || !chatId) {
     console.error('Telegram Bot Token or Chat ID not configured');
+    console.error('Available env:', { 
+      processEnv: Object.keys(process.env).filter(k => k.includes('TELEGRAM')),
+    });
     return false;
   }
 
