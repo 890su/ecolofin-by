@@ -1,13 +1,29 @@
 export { renderers } from '../../renderers.mjs';
 
+const __vite_import_meta_env__ = {"ASSETS_PREFIX": undefined, "BASE_URL": "/", "DEV": false, "MODE": "production", "PROD": true, "PUBLIC_SITE_URL": "https://ecolofin.by", "SITE": "https://ecolofin.by", "SSR": true};
+function getEnvVar(name) {
+  try {
+    if (typeof process !== "undefined" && process.env && process.env[name]) {
+      return process.env[name];
+    }
+  } catch (e) {
+  }
+  try {
+    if (typeof import.meta !== "undefined" && Object.assign(__vite_import_meta_env__, { TELEGRAM_BOT_TOKEN: "8503860004:AAHjB6l5VJ2D9NP8oGd8gGuczSNmH5QP9u8", TELEGRAM_CHAT_ID: "-5240163266", OS: process.env.OS }) && Object.assign(__vite_import_meta_env__, { TELEGRAM_BOT_TOKEN: "8503860004:AAHjB6l5VJ2D9NP8oGd8gGuczSNmH5QP9u8", TELEGRAM_CHAT_ID: "-5240163266", OS: process.env.OS })[name]) {
+      return Object.assign(__vite_import_meta_env__, { TELEGRAM_BOT_TOKEN: "8503860004:AAHjB6l5VJ2D9NP8oGd8gGuczSNmH5QP9u8", TELEGRAM_CHAT_ID: "-5240163266", OS: process.env.OS })[name];
+    }
+  } catch (e) {
+  }
+  return void 0;
+}
 async function sendToTelegram(data) {
-  const botToken = process.env.TELEGRAM_BOT_TOKEN || "8503860004:AAHjB6l5VJ2D9NP8oGd8gGuczSNmH5QP9u8";
-  const chatId = process.env.TELEGRAM_CHAT_ID || "-5240163266";
-  console.log("Telegram config check:", {
-    hasToken: true,
-    hasChatId: true,
-    chatIdValue: chatId
-  });
+  const botToken = getEnvVar("TELEGRAM_BOT_TOKEN");
+  const chatId = getEnvVar("TELEGRAM_CHAT_ID");
+  console.log("Telegram config:", { hasToken: !!botToken, hasChatId: !!chatId });
+  if (!botToken || !chatId) {
+    console.error("Telegram Bot Token or Chat ID not configured");
+    return false;
+  }
   const message = formatMessage(data);
   const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
   try {

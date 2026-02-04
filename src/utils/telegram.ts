@@ -6,22 +6,39 @@ export interface TelegramMessage {
   source?: string;
 }
 
-export async function sendToTelegram(data: TelegramMessage): Promise<boolean> {
-  // Vercel serverless uses process.env, Astro dev uses import.meta.env
-  const botToken = process.env.TELEGRAM_BOT_TOKEN || import.meta.env.TELEGRAM_BOT_TOKEN;
-  const chatId = process.env.TELEGRAM_CHAT_ID || import.meta.env.TELEGRAM_CHAT_ID;
+// Получение переменных окружения безопасным способом
+function getEnvVar(name: string): string | undefined {
+  try {
+    // Vercel serverless
+    if (typeof process !== 'undefined' && process.env && process.env[name]) {
+      return process.env[name];
+    }
+  } catch (e) {
+    // ignore
+  }
+  
+  try {
+    // Astro dev mode
+    // @ts-ignore
+    if (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env[name]) {
+      // @ts-ignore
+      return import.meta.env[name];
+    }
+  } catch (e) {
+    // ignore
+  }
+  
+  return undefined;
+}
 
-  console.log('Telegram config check:', { 
-    hasToken: !!botToken, 
-    hasChatId: !!chatId,
-    chatIdValue: chatId 
-  });
+export async function sendToTelegram(data: TelegramMessage): Promise<boolean> {
+  const botToken = getEnvVar('TELEGRAM_BOT_TOKEN');
+  const chatId = getEnvVar('TELEGRAM_CHAT_ID');
+
+  console.log('Telegram config:', { hasToken: !!botToken, hasChatId: !!chatId });
 
   if (!botToken || !chatId) {
     console.error('Telegram Bot Token or Chat ID not configured');
-    console.error('Available env:', { 
-      processEnv: Object.keys(process.env).filter(k => k.includes('TELEGRAM')),
-    });
     return false;
   }
 
