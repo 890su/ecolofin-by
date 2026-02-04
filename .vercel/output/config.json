@@ -22,18 +22,6 @@
 		{
 			"src": "^/api/contact/?$",
 			"dest": "_render"
-		},
-		{
-			"src": "^/privacy/?$",
-			"dest": "_render"
-		},
-		{
-			"src": "^/([^/]+?)/?$",
-			"dest": "_render"
-		},
-		{
-			"src": "^/$",
-			"dest": "_render"
 		}
 	]
 }
