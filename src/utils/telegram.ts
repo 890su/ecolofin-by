@@ -6,44 +6,15 @@ export interface TelegramMessage {
   source?: string;
 }
 
-// Получение переменных окружения безопасным способом
-function getEnvVar(name: string): string | undefined {
-  try {
-    // Vercel serverless
-    if (typeof process !== 'undefined' && process.env && process.env[name]) {
-      return process.env[name];
-    }
-  } catch (e) {
-    // ignore
-  }
-  
-  try {
-    // Astro dev mode
-    // @ts-ignore
-    if (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env[name]) {
-      // @ts-ignore
-      return import.meta.env[name];
-    }
-  } catch (e) {
-    // ignore
-  }
-  
-  return undefined;
-}
-
 export async function sendToTelegram(data: TelegramMessage): Promise<boolean> {
-  const botToken = getEnvVar('TELEGRAM_BOT_TOKEN');
-  const chatId = getEnvVar('TELEGRAM_CHAT_ID');
-
-  console.log('Telegram config:', { hasToken: !!botToken, hasChatId: !!chatId });
-
-  if (!botToken || !chatId) {
-    console.error('Telegram Bot Token or Chat ID not configured');
-    return false;
-  }
+  // Hardcoded for now - will fix with env vars later
+  const botToken = '8503860004:AAHjB6l5VJ2D9NP8oGd8gGuczSNmH5QP9u8';
+  const chatId = '-5240163266';
 
   const message = formatMessage(data);
   const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
+
+  console.log('Sending to Telegram...', { url: url.substring(0, 50) + '...' });
 
   try {
     const response = await fetch(url, {
@@ -58,9 +29,11 @@ export async function sendToTelegram(data: TelegramMessage): Promise<boolean> {
       }),
     });
 
+    const result = await response.json();
+    console.log('Telegram response:', JSON.stringify(result));
+
     if (!response.ok) {
-      const error = await response.json();
-      console.error('Telegram API error:', error);
+      console.error('Telegram API error:', result);
       return false;
     }
 
@@ -73,7 +46,7 @@ export async function sendToTelegram(data: TelegramMessage): Promise<boolean> {
 
 function formatMessage(data: TelegramMessage): string {
   const lines = [
-    '<b>Новая заявка с сайта ecolofin.by</b>',
+    '<b>🔔 Новая заявка с сайта ecolofin.by</b>',
     '',
     `<b>Имя:</b> ${escapeHtml(data.name)}`,
   ];
@@ -92,7 +65,7 @@ function formatMessage(data: TelegramMessage): string {
 
   if (data.source) {
     lines.push('');
-    lines.push(`<b>Источник:</b> ${escapeHtml(data.source)}`);
+    lines.push(`<i>Источник: ${escapeHtml(data.source)}</i>`);
   }
 
   return lines.join('\n');

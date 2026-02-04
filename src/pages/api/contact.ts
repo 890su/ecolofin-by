@@ -1,53 +1,63 @@
 import type { APIRoute } from 'astro';
-import { sendToTelegram } from '../../utils/telegram';
 
-export const prerender = false; // Ensure this runs as serverless function
+export const prerender = false;
+
+// Всё в одном файле - без импортов
+const BOT_TOKEN = '8503860004:AAHjB6l5VJ2D9NP8oGd8gGuczSNmH5QP9u8';
+const CHAT_ID = '-5240163266';
 
 export const POST: APIRoute = async ({ request }) => {
-  console.log('=== Contact API called ===');
-  
   try {
-    const data = await request.json();
-    console.log('Received data:', JSON.stringify(data));
-    
-    const { name, email, phone, message, source } = data;
+    const body = await request.json();
+    const { name, phone, email, message, source } = body;
 
-    // Валидация
     if (!name || !phone) {
-      console.log('Validation failed: missing name or phone');
       return new Response(
         JSON.stringify({ success: false, error: 'Имя и телефон обязательны' }),
         { status: 400, headers: { 'Content-Type': 'application/json' } }
       );
     }
 
-    // Отправка в Telegram
-    console.log('Sending to Telegram...');
-    const success = await sendToTelegram({
-      name: name.trim(),
-      email: email?.trim(),
-      phone: phone.trim(),
-      message: message?.trim(),
-      source: source || 'Форма обратной связи',
+    // Формируем сообщение
+    let text = `<b>🔔 Новая заявка с ecolofin.by</b>\n\n`;
+    text += `<b>Имя:</b> ${name}\n`;
+    text += `<b>Телефон:</b> ${phone}\n`;
+    if (email) text += `<b>Email:</b> ${email}\n`;
+    if (message) text += `<b>Сообщение:</b> ${message}\n`;
+    if (source) text += `\n<i>Источник: ${source}</i>`;
+
+    // Отправляем в Telegram
+    const telegramUrl = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
+    
+    const telegramResponse = await fetch(telegramUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        chat_id: CHAT_ID,
+        text: text,
+        parse_mode: 'HTML',
+      }),
     });
 
-    console.log('Telegram result:', success);
+    const telegramResult = await telegramResponse.json();
 
-    if (!success) {
+    if (!telegramResponse.ok) {
+      console.error('Telegram error:', telegramResult);
       return new Response(
-        JSON.stringify({ success: false, error: 'Ошибка при отправке сообщения' }),
+        JSON.stringify({ success: false, error: 'Ошибка Telegram' }),
         { status: 500, headers: { 'Content-Type': 'application/json' } }
       );
     }
 
     return new Response(
-      JSON.stringify({ success: true, message: 'Сообщение успешно отправлено' }),
+      JSON.stringify({ success: true }),
       { status: 200, headers: { 'Content-Type': 'application/json' } }
     );
-  } catch (error) {
-    console.error('API error:', error);
+
+  } catch (error: any) {
+    console.error('API Error:', error?.message || error);
     return new Response(
-      JSON.stringify({ success: false, error: 'Внутренняя ошибка сервера' }),
+      JSON.stringify({ success: false, error: error?.message || 'Ошибка сервера' }),
       { status: 500, headers: { 'Content-Type': 'application/json' } }
     );
   }
